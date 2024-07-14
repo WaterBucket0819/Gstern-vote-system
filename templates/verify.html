@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>验证选票</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        select, input[type="submit"], .back-button {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .back-button {
+            background-color: #008CBA;
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            line-height: 1.5;
+        }
+        .back-button:hover {
+            background-color: #007B9A;
+        }
+        .disabled-button {
+            background-color: grey;
+            color: white;
+            cursor: not-allowed;
+        }
+        .message {
+            background-color: #f9f9f9;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>验证选票</h2>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="message">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <form action="{{ url_for('verify') }}" method="post" id="verificationForm">
+            <select id="themesDropdown" name="theme">
+                <option value="">选择主题</option>
+                {% for theme in themes %}
+                    <option value="{{ theme.tid }}">{{ theme.themes }}</option>
+                {% endfor %}
+            </select>
+            <select id="groupsDropdown" name="group">
+                <option value="">选择组</option>
+                {% for group in groups %}
+                    <option value="{{ group.uid }},{{ group.groupname }}">{{ group.groupname }}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="验证" id="submitButton">
+        </form>
+        <a href="{{ url_for('dashboard') }}" class="back-button">返回上级</a>
+    </div>
+
+    <script>
+        document.getElementById('verificationForm').addEventListener('submit', function(event) {
+            var button = document.getElementById('submitButton');
+            button.value = '验证中';
+            button.classList.add('disabled-button');
+            button.disabled = true;
+        });
+    </script>
+</body>
+</html>

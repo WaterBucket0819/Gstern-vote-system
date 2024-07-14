@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vote</title>
+</head>
+<body>
+    <h2>Vote</h2>
+    <div>Welcome!{{ group_name }}</div>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div>{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <form action="{{ url_for('add_members') }}" method="get">
+        <input type="submit" value="添加组员">
+    </form>
+    <form action="{{ url_for('vote') }}" method="POST" enctype="multipart/form-data">
+        <label for="theme">Select Theme:</label><br>
+        <select id="theme" name="theme">
+            {% for theme in themes %}
+                <option value="{{ theme.tid }}">{{ theme.themes }}</option>
+            {% endfor %}
+        </select><br><br>
+        <input type="text" name="content"><br><br>
+        <input type="submit" value="Vote">
+    </form>
+    <form action="{{ url_for('logout') }}" method="GET">
+        <input type="submit" value="Logout">
+    </form>
+</body>
+</html>

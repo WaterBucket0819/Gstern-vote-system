@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Themes</title>
+</head>
+<body>
+    <h2>Manage Themes</h2>
+    <form action="{{ url_for('manage') }}" method="POST">
+        <label for="theme">Theme:</label><br>
+        <input type="text" id="theme" name="theme"><br><br>
+        <label for="deadtime">Deadline Time:</label><br>
+        <input type="datetime-local" id="deadtime" name="deadtime"><br><br>
+        <input type="submit" value="Add Theme">
+    </form>
+    <form action="{{ url_for('logout') }}" method="GET">
+        <input type="submit" value="Logout">
+    </form>
+</body>
+</html>

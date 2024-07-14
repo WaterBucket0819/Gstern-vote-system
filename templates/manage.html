@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理投票</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin: 10px 0 5px;
+            color: #555;
+        }
+        input[type="text"],
+        input[type="datetime-local"],
+        input[type="submit"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        input[type="datetime-local"] {
+            padding: 8px 10px;
+            font-size: 16px;
+        }
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .logout-btn {
+            background-color: #f44336;
+            margin-top: 10px;
+        }
+        .logout-btn:hover {
+            background-color: #e53935;
+        }
+    </style>
+    <link rel="stylesheet" href="../static/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h2>投票管理</h2>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-info message">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+        <form action="{{ url_for('manage') }}" method="POST">
+            <label for="theme">主题:</label>
+            <input type="text" id="theme" name="theme" placeholder="输入投票主题">
+            
+            <label for="deadtime">结束时间:</label>
+            <input type="datetime-local" value="2024-06-01T08:30" id="deadtime" name="deadtime">
+
+            <input type="submit" value="添加投票">
+        </form>
+        <form action="{{ url_for('logout') }}" method="GET">
+            <input type="submit" value="登出" class="logout-btn">
+        </form>
+    </div>
+</body>
+</html>

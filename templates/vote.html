@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>投票页面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            width: 100%;
+            max-width: 800px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 20px;
+            background-color: #fff;
+            border-bottom: 1px solid #ccc;
+        }
+        .header h2 {
+            margin: 0;
+            color: #333;
+        }
+        .header .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .header .dropdown .dropbtn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .header .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+        .header .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        .header .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+        .header .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        .header .dropdown:hover .dropbtn {
+            background-color: #3e8e41;
+        }
+        .vote-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            width: 100%;
+            text-align: center;
+        }
+        .vote-container label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            text-align: left;
+        }
+        .vote-container select,
+        .vote-container input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .vote-container input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .vote-container input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .message {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+        .vote-container form {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>投票</h2>
+            <div class="dropdown">
+                <button class="dropbtn">{{ group_name }}</button>
+                <div class="dropdown-content">
+                    <a href="{{ url_for('logout') }}">退出登录</a>
+                </div>
+            </div>
+        </div>
+        <div class="vote-container">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="message">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            <form action="{{ url_for('add_members') }}" method="get">
+                <input type="submit" value="添加组员">
+            </form>
+            <form action="{{ url_for('vote') }}" method="POST" enctype="multipart/form-data">
+                <label for="theme">选择主题:</label>
+                <select id="theme" name="theme">
+                    {% for theme in themes %}
+                        <option value="{{ theme.tid }}">{{ theme.themes }}</option>
+                    {% endfor %}
+                </select>
+                <input type="text" name="content" placeholder="请输入您的投票内容">
+                <input type="submit" value="投票">
+            </form>
+        </div>
+    </div>
+</body>
+</html>

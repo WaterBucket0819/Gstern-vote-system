@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>计票控制台</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            width: 100%;
+            max-width: 800px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 20px;
+            background-color: #fff;
+            border-bottom: 1px solid #ccc;
+        }
+        .header h1 {
+            margin: 0;
+            color: #333;
+        }
+        .header .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .header .dropdown .dropbtn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .header .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+        .header .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        .header .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+        .header .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        .header .dropdown:hover .dropbtn {
+            background-color: #3e8e41;
+        }
+        .menu-forms {
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        .menu-forms form {
+            margin-bottom: 10px;
+        }
+        .menu-forms input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .menu-forms input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>计票控制台</h1>
+            <div class="dropdown">
+                <button class="dropbtn">{{ username }}</button>
+                <div class="dropdown-content">
+                    <a href="{{ url_for('logout') }}">登出</a>
+                </div>
+            </div>
+        </div>
+        <div class="menu-forms">
+            <form action="{{ url_for('verify') }}" method="GET">
+                <input type="submit" value="验证选票">
+            </form>
+            <form action="{{ url_for('link') }}" method="GET">
+                <input type="submit" value="消息链接">
+            </form>
+            <form action="{{ url_for('show') }}" method="GET">
+                <input type="submit" value="结果公示">
+            </form>
+        </div>
+    </div>
+</body>
+</html>

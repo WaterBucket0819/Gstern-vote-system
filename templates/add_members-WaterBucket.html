@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>添加组员</title>
+</head>
+<body>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div>{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <form action="{{ url_for('add_members') }}" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".csv"><br><br> <!-- 新增的上传按钮 -->
+        <input type="submit" value="提交">
+    </form>
+    
+</body>
+</html>

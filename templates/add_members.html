@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>添加组员</title>
+    <link rel="stylesheet" href="../static/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .form-container {
+            max-width: 600px; /* Changed max-width to 600px */
+            width: 100%;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: center;
+        }
+        .progress-bar-container {
+            background-color: #e9ecef;
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 20px;
+        }
+        .progress {
+            height: 20px;
+            background-color: #4CAF50;
+            border-radius: 4px;
+            transition: width 0.3s ease-in-out;
+        }
+        .message {
+            margin-bottom: 20px;
+        }
+        .file-input {
+            margin-bottom: 20px;
+        }
+        /* Styling for the green button */
+        .green-button {
+            background-color: #28a745; /* Green */
+            color: white;
+        }
+        .green-button:hover {
+            background-color: #218838; /* Darker green on hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h2>添加组员</h2>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-info message">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            <form action="{{ url_for('add_members') }}" method="post" enctype="multipart/form-data" id="uploadForm">
+                <div class="custom-file file-input">
+                    <input type="file" class="custom-file-input" id="file" name="file" accept=".csv">
+                    <label class="custom-file-label" for="file">选择文件...</label>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">提交</button>
+            </form>
+            <form action="{{ url_for('vote') }}" method ="get" >
+                <br>
+                <!-- Added class "green-button" to style the button -->
+                <button type="submit" class="btn btn-primary btn-block green-button">返回上级</button>
+            </form>
+            <div class="progress-bar-container">
+                <div class="progress" id="progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/jquery-3.5.1.slim.min.js"></script>
+    <script src="../js/popper.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+            var formData = new FormData(this);
+            
+            // Start the file upload via AJAX
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '{{ url_for("add_members") }}', true);
+            
+            xhr.upload.addEventListener('loadstart', function() {
+                updateProgress();
+            });
+
+            xhr.send(formData);
+        });
+
+        document.querySelector('.custom-file-input').addEventListener('change', function(event) {
+            var fileName = event.target.files[0].name;
+            var nextSibling = event.target.nextElementSibling;
+            nextSibling.innerText = fileName;
+        });
+
+        function updateProgress() {
+            var progressBar = document.getElementById('progress');
+
+            var interval = setInterval(function() {
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', '{{ url_for("get_progress") }}', true);
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        var response = JSON.parse(xhr.responseText);
+                        var progress = response.progress; // Progress is already in percentage
+                        progressBar.style.width = progress + '%';
+                        if (progress >= 100) {
+                            clearInterval(interval);
+                            alert('添加完成!')
+                            window.location.href = "{{ url_for('vote') }}";
+                        }
+                    }
+                };
+                xhr.send();
+            }, 1000); // Check progress every second
+        }
+    </script>
+</body>
+</html>
